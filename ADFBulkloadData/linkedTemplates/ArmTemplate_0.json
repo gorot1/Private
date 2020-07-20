@@ -7,13 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "ADFBulkloadData"
 		},
-		"LMOTrucking_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LMOTrucking'"
-		},
 		"AzureDataLakeDestination_servicePrincipalKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureDataLakeDestination'"
+		},
+		"LMOTrucking_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LMOTrucking'"
 		},
 		"AzureDataLakeDestination_properties_typeProperties_dataLakeStoreUri": {
 			"type": "string",
@@ -41,19 +41,6 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/LMOTrucking')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureSqlDatabase",
-				"typeProperties": {
-					"connectionString": "[parameters('LMOTrucking_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/AzureDataLakeDestination')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -75,21 +62,48 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/Tablelist')]",
+			"name": "[concat(parameters('factoryName'), '/LMOTrucking')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('LMOTrucking_connectionString')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ParquetTable')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LMOTrucking",
+					"referenceName": "AzureDataLakeDestination",
 					"type": "LinkedServiceReference"
 				},
+				"parameters": {
+					"FileName": {
+						"type": "string"
+					}
+				},
 				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [],
-				"typeProperties": {}
+				"type": "Parquet",
+				"typeProperties": {
+					"location": {
+						"type": "AzureDataLakeStoreLocation",
+						"fileName": {
+							"value": "@dataset().FileName",
+							"type": "Expression"
+						}
+					},
+					"compressionCodec": "snappy"
+				},
+				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LMOTrucking')]"
+				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeDestination')]"
 			]
 		},
 		{
@@ -128,35 +142,21 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ParquetTable')]",
+			"name": "[concat(parameters('factoryName'), '/Tablelist')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "AzureDataLakeDestination",
+					"referenceName": "LMOTrucking",
 					"type": "LinkedServiceReference"
 				},
-				"parameters": {
-					"FileName": {
-						"type": "string"
-					}
-				},
 				"annotations": [],
-				"type": "Parquet",
-				"typeProperties": {
-					"location": {
-						"type": "AzureDataLakeStoreLocation",
-						"fileName": {
-							"value": "@dataset().FileName",
-							"type": "Expression"
-						}
-					},
-					"compressionCodec": "snappy"
-				},
-				"schema": []
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureDataLakeDestination')]"
+				"[concat(variables('factoryId'), '/linkedServices/LMOTrucking')]"
 			]
 		},
 		{
@@ -281,6 +281,37 @@
 				"[concat(variables('factoryId'), '/datasets/Tablelist')]",
 				"[concat(variables('factoryId'), '/datasets/SQLTable')]",
 				"[concat(variables('factoryId'), '/datasets/ParquetTable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/trigger1')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Started",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "BulkCopyTables",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 1,
+						"startTime": "2020-07-20T18:10:00.000Z",
+						"endTime": "2020-07-21T22:07:00.000Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/BulkCopyTables')]"
 			]
 		}
 	]

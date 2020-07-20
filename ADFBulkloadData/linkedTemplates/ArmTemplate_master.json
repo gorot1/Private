@@ -7,13 +7,13 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "ADFBulkloadData"
 		},
-		"LMOTrucking_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'LMOTrucking'"
-		},
 		"AzureDataLakeDestination_servicePrincipalKey": {
 			"type": "secureString",
 			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureDataLakeDestination'"
+		},
+		"LMOTrucking_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LMOTrucking'"
 		},
 		"AzureDataLakeDestination_properties_typeProperties_dataLakeStoreUri": {
 			"type": "string",
@@ -62,11 +62,11 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"LMOTrucking_connectionString": {
-						"value": "[parameters('LMOTrucking_connectionString')]"
-					},
 					"AzureDataLakeDestination_servicePrincipalKey": {
 						"value": "[parameters('AzureDataLakeDestination_servicePrincipalKey')]"
+					},
+					"LMOTrucking_connectionString": {
+						"value": "[parameters('LMOTrucking_connectionString')]"
 					},
 					"AzureDataLakeDestination_properties_typeProperties_dataLakeStoreUri": {
 						"value": "[parameters('AzureDataLakeDestination_properties_typeProperties_dataLakeStoreUri')]"

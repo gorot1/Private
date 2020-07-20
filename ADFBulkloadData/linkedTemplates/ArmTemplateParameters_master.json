@@ -5,10 +5,10 @@
 		"factoryName": {
 			"value": "ADFBulkloadData"
 		},
-		"LMOTrucking_connectionString": {
+		"AzureDataLakeDestination_servicePrincipalKey": {
 			"value": ""
 		},
-		"AzureDataLakeDestination_servicePrincipalKey": {
+		"LMOTrucking_connectionString": {
 			"value": ""
 		},
 		"AzureDataLakeDestination_properties_typeProperties_dataLakeStoreUri": {
