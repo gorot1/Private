@@ -18,8 +18,7 @@
 				"fileName": {
 					"value": "@dataset().FileName",
 					"type": "Expression"
-				},
-				"folderPath": "Data Export"
+				}
 			},
 			"compressionCodec": "snappy"
 		},
