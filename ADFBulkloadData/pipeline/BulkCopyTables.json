@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "BulkCopyTables",
 	"properties": {
 		"activities": [
 			{
@@ -84,7 +84,7 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"tableName": {
-											"value": "@item().table_schema",
+											"value": "@item().table_name",
 											"type": "Expression"
 										},
 										"schemaName": {
