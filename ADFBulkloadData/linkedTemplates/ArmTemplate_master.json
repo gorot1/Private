@@ -1,0 +1,91 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "ADFBulkloadData"
+		},
+		"LMOTrucking_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LMOTrucking'"
+		},
+		"AzureDataLakeDestination_servicePrincipalKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'servicePrincipalKey' of 'AzureDataLakeDestination'"
+		},
+		"AzureDataLakeDestination_properties_typeProperties_dataLakeStoreUri": {
+			"type": "string",
+			"defaultValue": "https://batech.azuredatalakestore.net/webhdfs/v1"
+		},
+		"AzureDataLakeDestination_properties_typeProperties_servicePrincipalId": {
+			"type": "string",
+			"defaultValue": "eb446ed6-3749-4605-be45-35b4a456205b"
+		},
+		"AzureDataLakeDestination_properties_typeProperties_tenant": {
+			"type": "string",
+			"defaultValue": "18379727-6bee-4b7c-b01e-6662eb83d8ce"
+		},
+		"AzureDataLakeDestination_properties_typeProperties_subscriptionId": {
+			"type": "string",
+			"defaultValue": "c47c5f8d-993a-490d-8c99-8754992aeeb9"
+		},
+		"AzureDataLakeDestination_properties_typeProperties_resourceGroupName": {
+			"type": "string",
+			"defaultValue": "your-resource-group"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LMOTrucking_connectionString": {
+						"value": "[parameters('LMOTrucking_connectionString')]"
+					},
+					"AzureDataLakeDestination_servicePrincipalKey": {
+						"value": "[parameters('AzureDataLakeDestination_servicePrincipalKey')]"
+					},
+					"AzureDataLakeDestination_properties_typeProperties_dataLakeStoreUri": {
+						"value": "[parameters('AzureDataLakeDestination_properties_typeProperties_dataLakeStoreUri')]"
+					},
+					"AzureDataLakeDestination_properties_typeProperties_servicePrincipalId": {
+						"value": "[parameters('AzureDataLakeDestination_properties_typeProperties_servicePrincipalId')]"
+					},
+					"AzureDataLakeDestination_properties_typeProperties_tenant": {
+						"value": "[parameters('AzureDataLakeDestination_properties_typeProperties_tenant')]"
+					},
+					"AzureDataLakeDestination_properties_typeProperties_subscriptionId": {
+						"value": "[parameters('AzureDataLakeDestination_properties_typeProperties_subscriptionId')]"
+					},
+					"AzureDataLakeDestination_properties_typeProperties_resourceGroupName": {
+						"value": "[parameters('AzureDataLakeDestination_properties_typeProperties_resourceGroupName')]"
+					}
+				}
+			},
+			"dependsOn": []
+		}
+	]
+}
