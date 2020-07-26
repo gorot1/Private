@@ -1,0 +1,38 @@
+{
+	"name": "cars",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Blob",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "dbo_Cars.parquet",
+				"folderPath": "Input",
+				"container": "adftutorial"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": [
+			{
+				"name": "ID",
+				"type": "INT32"
+			},
+			{
+				"name": "Name",
+				"type": "UTF8"
+			},
+			{
+				"name": "Model",
+				"type": "UTF8"
+			},
+			{
+				"name": "Length",
+				"type": "INT32"
+			}
+		]
+	}
+}
