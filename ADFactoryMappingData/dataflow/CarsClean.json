@@ -24,9 +24,12 @@
 			"transformations": [
 				{
 					"name": "DerivedColumn1"
+				},
+				{
+					"name": "date"
 				}
 			],
-			"script": "source(output(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet') ~> CarsOutput\nCarsOutput derive(NameModel = concat(Name,Model)) ~> DerivedColumn1\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['CleanCars'],\n\ttruncate: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> CarsClean"
+			"script": "source(output(\n\t\tID as integer,\n\t\tName as string,\n\t\tModel as string,\n\t\tLength as integer\n\t),\n\tallowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet') ~> CarsOutput\ndate derive(NameModel = concat(CurrentDate,Model)) ~> DerivedColumn1\nCarsOutput derive(CurrentDate = currentDate()) ~> date\nDerivedColumn1 sink(allowSchemaDrift: true,\n\tvalidateSchema: false,\n\tformat: 'parquet',\n\tpartitionFileNames:['CleanCars'],\n\ttruncate: true,\n\tskipDuplicateMapInputs: true,\n\tskipDuplicateMapOutputs: true) ~> CarsClean"
 		}
 	}
 }
