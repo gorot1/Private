@@ -1,0 +1,13 @@
+{
+	"name": "AzureDataLakeStore1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDataLakeStore",
+		"typeProperties": {
+			"dataLakeStoreUri": "https://batech.azuredatalakestore.net/webhdfs/v1",
+			"tenant": "18379727-6bee-4b7c-b01e-6662eb83d8ce",
+			"subscriptionId": "c47c5f8d-993a-490d-8c99-8754992aeeb9",
+			"resourceGroupName": "your-resource-group"
+		}
+	}
+}
